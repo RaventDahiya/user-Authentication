@@ -1,0 +1,224 @@
+{
+	"info": {
+		"_postman_id": "7e8e332d-1f22-4eb5-8893-008ed8d83e8d",
+		"name": "user_auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44650467",
+		"_collection_link": "https://ravent-3541858.postman.co/workspace/ravent's-Workspace~de0d8adf-15fe-4874-87ea-72e8cc1747a7/collection/44650467-7e8e332d-1f22-4eb5-8893-008ed8d83e8d?action=share&source=collection_link&creator=44650467"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Test7\",\r\n  \"email\": \"test7@example.com\",\r\n  \"password\": \"12345678934213\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{custom_server}}/users/register",
+							"host": [
+								"{{custom_server}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Test4\",\r\n  \"email\": \"test4@example.com\",\r\n  \"password\": \"1234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{custom_server}}/users/profile",
+							"host": [
+								"{{custom_server}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Test4\",\r\n  \"email\": \"test4@example.com\",\r\n  \"password\": \"1234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{custom_server}}/users/logout",
+							"host": [
+								"{{custom_server}}"
+							],
+							"path": [
+								"users",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3000/api/v1/users/verify/bdfd0c5ab93a8a2bab248d778364d4ea00f40bf0a50f44b8d6af47ecccf55f0c",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"verify",
+								"bdfd0c5ab93a8a2bab248d778364d4ea00f40bf0a50f44b8d6af47ecccf55f0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resetPassword",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"12345678934213\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3000/api/v1/users/verify/bdfd0c5ab93a8a2bab248d778364d4ea00f40bf0a50f44b8d6af47ecccf55f0c",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"verify",
+								"bdfd0c5ab93a8a2bab248d778364d4ea00f40bf0a50f44b8d6af47ecccf55f0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Test7\",\r\n  \"email\": \"test7@example.com\",\r\n  \"password\": \"12345678934213\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{custom_server}}/users/login",
+							"host": [
+								"{{custom_server}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgotPassword",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"test7@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{custom_server}}/users/forgotPassword",
+							"host": [
+								"{{custom_server}}"
+							],
+							"path": [
+								"users",
+								"forgotPassword"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

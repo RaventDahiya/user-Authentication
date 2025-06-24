@@ -145,7 +145,7 @@ const login = async (req, res) => {
 
     //jwt.sign(data,secret,expire)
     const token = jwt.sign(
-      { id: user._id, role: user.role },
+      { id: user._id, role: user.role }, //token contain id which will help in identifying it
       process.env.JWT_SECRET,
       {
         expiresIn: "24h",
@@ -177,14 +177,21 @@ const login = async (req, res) => {
 };
 
 const getMe = async (req, res) => {
-  //take token from cookie very it
-  //get user data
+  //take token from cookie +> by middleware auth we get req.user which contain token
+  //find user by token and get data
   try {
-    console.log("reached at profile");
-    console.log("req.user:", req.user);
-    res.status(200).json({
-      message: "Profile fetched successfully",
-      user: req.user,
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "user not found",
+      });
+    }
+    //send user with res
+    return res.status(201).json({
+      success: true,
+      message: "user data fetched succesfully",
+      user,
     });
   } catch (error) {
     res.status(500).json({
@@ -196,16 +203,111 @@ const getMe = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-  } catch (error) {}
+    res.cookie("token", "", {
+      /*expires: new DataTransfer(0)*/
+    }); // clear cookie to logout
+    return res.status(201).json({
+      success: true,
+      message: "user loged out succesfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "can not logout",
+      error: error.message,
+    });
+  }
 };
 
 const forgotPassword = async (req, res) => {
   try {
-  } catch (error) {}
+    //get email
+    const { email } = req.body;
+    //find user based on email
+    const user = await User.findOne({ email });
+    //reset token + reser expiry Date.now()+10*60*1000 +>10 min user.save
+    const token = crypto.randomBytes(32).toString("hex");
+    const rTokenExp = Date.now() + 10 * 60 * 1000; // 10 minutes from now
+    //now token will be store in cookies
+    const cookieOptions = {
+      httpOnly: true,
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    };
+    res.cookie("token", token, cookieOptions);
+    //save user
+    user.resetPasswordToken = token;
+    user.resetPasswordTokenExpires = rTokenExp;
+    await user.save();
+
+    //send email design url
+    const transporter = nodemailer.createTransport({
+      host: process.env.MAILTRAP_HOST,
+      port: process.env.MAILTRAP_PORT,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: process.env.MAILTRAP_USERNAME,
+        pass: process.env.MAILTRAP_PASSWORD,
+      },
+    });
+
+    const mailOption = {
+      from: process.env.MAILTRAP_SENDEREMAIL,
+      to: user.email,
+      subject: "reset Password Token",
+      text: `please click on the following link:
+             ${process.env.CORS_ORIGIN}/api/v1/users/resetPassword/${token}`,
+    };
+
+    await transporter.sendMail(mailOption);
+
+    res.status(200).json({
+      success: true,
+      message: "reset link send to email",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "can not geneate reset token",
+      error: error.message,
+    });
+  }
 };
 const resetPassword = async (req, res) => {
+  //collect token from params
+  //password from req.body
+  const { token } = req.params;
+  const { NewPassword } = req.body;
+
+  //find user by token
   try {
-  } catch (error) {}
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordTokenExpires: { $gt: Date.now() }, //grater than
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "user not found",
+        success: false,
+      });
+    }
+    //set new password in user
+    user.password = NewPassword;
+    //empty reset tokens
+    user.resetPasswordToken = "";
+    user.resetPasswordTokenExpires = "";
+    //save
+    await user.save();
+    //return res
+    return res.status(201).json({
+      success: true,
+      message: "password changed succesfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "can not change password",
+      error: error.message,
+    });
+  }
 };
 
 export {
